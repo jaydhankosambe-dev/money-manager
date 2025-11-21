@@ -52,6 +52,17 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
+        policy.WithOrigins(
+                "https://moneymanagerindia.netlify.app",
+                "http://localhost:8081",
+                "http://localhost:3000")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+    });
+    
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
         policy.AllowAnyOrigin()
               .AllowAnyMethod()
               .AllowAnyHeader();
@@ -81,7 +92,8 @@ if (app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
-app.UseCors("AllowAll");
+// Use different CORS policy based on environment
+app.UseCors(app.Environment.IsDevelopment() ? "AllowAll" : "AllowAllOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
