@@ -1,0 +1,60 @@
+# Backend (.NET)
+**/bin/
+**/obj/
+**/*.user
+**/*.suo
+**/*.cache
+**/.vs/
+**/Properties/launchSettings.json
+
+# Database
+*.mdf
+*.ldf
+*.db
+*.db-shm
+*.db-wal
+
+# Frontend (Node/React Native)
+**/node_modules/
+**/.expo/
+**/.expo-shared/
+**/dist/
+**/web-build/
+**/.cache/
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+**/*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Build outputs
+**/build/
+**/out/
+
+# Dependencies
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Sensitive data
+**/appsettings.Development.json
+**/secrets.json
+
+# Misc
+*.bak
+*.tmp
+*.temp

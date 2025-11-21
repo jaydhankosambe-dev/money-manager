@@ -1,0 +1,471 @@
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Switch,
+  Image,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { settingsAPI } from '../services/api';
+import { getUser, removeToken, removeUser } from '../utils/storage';
+import { COLORS, SIZES, FONTS } from '../utils/theme';
+
+export default function SettingsScreen({ navigation }) {
+  const [user, setUser] = useState(null);
+  const [settings, setSettings] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState(false);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadData();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  const loadData = async () => {
+    try {
+      const userData = await getUser();
+      setUser(userData);
+
+      const settingsData = await settingsAPI.getSettings();
+      setSettings(settingsData);
+    } catch (error) {
+      console.error('Error loading settings:', error);
+      Alert.alert('Error', 'Failed to load settings');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateSetting = async (key, value) => {
+    setUpdating(true);
+    try {
+      const updatedSettings = await settingsAPI.updateSettings({ [key]: value });
+      setSettings(updatedSettings);
+    } catch (error) {
+      console.error('Error updating settings:', error);
+      Alert.alert('Error', 'Failed to update settings');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const handleLogout = () => {
+    Alert.alert('Logout', 'Are you sure you want to logout?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Logout',
+        style: 'destructive',
+        onPress: async () => {
+          await removeToken();
+          await removeUser();
+          navigation.replace('Login');
+        },
+      },
+    ]);
+  };
+
+  const getUserInitials = () => {
+    if (!user?.name) return 'U';
+    return user.name.charAt(0).toUpperCase();
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Settings</Text>
+      </View>
+
+      <ScrollView style={styles.content}>
+        {/* User Profile Section */}
+        <View style={styles.profileSection}>
+          {user?.profilePhotoUrl ? (
+            <Image source={{ uri: user.profilePhotoUrl }} style={styles.profilePhoto} />
+          ) : (
+            <View style={styles.profileInitials}>
+              <Text style={styles.profileInitialsText}>{getUserInitials()}</Text>
+            </View>
+          )}
+          <View style={styles.profileInfo}>
+            <Text style={styles.profileName}>{user?.name}</Text>
+            <Text style={styles.profileEmail}>{user?.email}</Text>
+          </View>
+        </View>
+
+        {/* Dashboard View Type */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Dashboard Display</Text>
+          
+          <View style={styles.settingItem}>
+            <Text style={styles.settingLabel}>View Type</Text>
+            <View style={styles.viewTypeButtons}>
+              {['Grid', 'Tiles', 'Table'].map((type) => (
+                <TouchableOpacity
+                  key={type}
+                  style={[
+                    styles.viewTypeButton,
+                    settings?.dashboardViewType === type && styles.viewTypeButtonActive,
+                  ]}
+                  onPress={() => updateSetting('dashboardViewType', type)}
+                  disabled={updating}
+                >
+                  <Ionicons
+                    name={
+                      type === 'Grid' ? 'grid' :
+                      type === 'Tiles' ? 'list' : 'table'
+                    }
+                    size={20}
+                    color={settings?.dashboardViewType === type ? COLORS.textDark : COLORS.text}
+                  />
+                  <Text
+                    style={[
+                      styles.viewTypeText,
+                      settings?.dashboardViewType === type && styles.viewTypeTextActive,
+                    ]}
+                  >
+                    {type}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </View>
+
+        {/* Display Options */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Display Options</Text>
+          
+          <View style={styles.settingItem}>
+            <Text style={styles.settingLabel}>Show Amount</Text>
+            <Switch
+              value={settings?.showAmount}
+              onValueChange={(value) => updateSetting('showAmount', value)}
+              trackColor={{ false: COLORS.border, true: COLORS.primary }}
+              thumbColor={settings?.showAmount ? COLORS.secondary : COLORS.surface}
+              disabled={updating}
+            />
+          </View>
+
+          <View style={styles.settingItem}>
+            <Text style={styles.settingLabel}>Show Percentage</Text>
+            <Switch
+              value={settings?.showPercentage}
+              onValueChange={(value) => updateSetting('showPercentage', value)}
+              trackColor={{ false: COLORS.border, true: COLORS.primary }}
+              thumbColor={settings?.showPercentage ? COLORS.secondary : COLORS.surface}
+              disabled={updating}
+            />
+          </View>
+
+          <View style={styles.settingItem}>
+            <Text style={styles.settingLabel}>Show Entity Name</Text>
+            <Switch
+              value={settings?.showEntityName}
+              onValueChange={(value) => updateSetting('showEntityName', value)}
+              trackColor={{ false: COLORS.border, true: COLORS.primary }}
+              thumbColor={settings?.showEntityName ? COLORS.secondary : COLORS.surface}
+              disabled={updating}
+            />
+          </View>
+
+          <View style={styles.settingItem}>
+            <Text style={styles.settingLabel}>Show Investment Type</Text>
+            <Switch
+              value={settings?.showInvestmentType}
+              onValueChange={(value) => updateSetting('showInvestmentType', value)}
+              trackColor={{ false: COLORS.border, true: COLORS.primary }}
+              thumbColor={settings?.showInvestmentType ? COLORS.secondary : COLORS.surface}
+              disabled={updating}
+            />
+          </View>
+        </View>
+
+        {/* Theme */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Theme</Text>
+          
+          <View style={styles.themeButtons}>
+            {['Light', 'Dark'].map((theme) => (
+              <TouchableOpacity
+                key={theme}
+                style={[
+                  styles.themeButton,
+                  settings?.theme === theme && styles.themeButtonActive,
+                ]}
+                onPress={() => updateSetting('theme', theme)}
+                disabled={updating}
+              >
+                <Ionicons
+                  name={theme === 'Light' ? 'sunny' : 'moon'}
+                  size={24}
+                  color={settings?.theme === theme ? COLORS.textDark : COLORS.text}
+                />
+                <Text
+                  style={[
+                    styles.themeText,
+                    settings?.theme === theme && styles.themeTextActive,
+                  ]}
+                >
+                  {theme}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* Color Scheme */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Dashboard Color Scheme</Text>
+          
+          <View style={styles.colorButtons}>
+            {['Default', 'Blue', 'Green', 'Purple'].map((scheme) => (
+              <TouchableOpacity
+                key={scheme}
+                style={[
+                  styles.colorButton,
+                  settings?.dashboardColorScheme === scheme && styles.colorButtonActive,
+                ]}
+                onPress={() => updateSetting('dashboardColorScheme', scheme)}
+                disabled={updating}
+              >
+                <Text
+                  style={[
+                    styles.colorText,
+                    settings?.dashboardColorScheme === scheme && styles.colorTextActive,
+                  ]}
+                >
+                  {scheme}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* Logout Button */}
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Ionicons name="log-out" size={24} color={COLORS.error} />
+          <Text style={styles.logoutText}>Logout</Text>
+        </TouchableOpacity>
+
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>Money Manager v1.0.0</Text>
+        </View>
+      </ScrollView>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  header: {
+    paddingHorizontal: SIZES.padding,
+    paddingTop: 50,
+    paddingBottom: 20,
+    backgroundColor: COLORS.primary,
+  },
+  headerTitle: {
+    fontSize: FONTS.xlarge,
+    fontWeight: 'bold',
+    color: COLORS.textDark,
+  },
+  content: {
+    flex: 1,
+  },
+  profileSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: SIZES.padding * 2,
+    backgroundColor: COLORS.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+  },
+  profilePhoto: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+  },
+  profileInitials: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: COLORS.secondary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileInitialsText: {
+    fontSize: FONTS.xlarge,
+    fontWeight: 'bold',
+    color: COLORS.text,
+  },
+  profileInfo: {
+    marginLeft: 20,
+    flex: 1,
+  },
+  profileName: {
+    fontSize: FONTS.large,
+    fontWeight: 'bold',
+    color: COLORS.text,
+    marginBottom: 5,
+  },
+  profileEmail: {
+    fontSize: FONTS.regular,
+    color: COLORS.textSecondary,
+  },
+  section: {
+    padding: SIZES.padding,
+    backgroundColor: COLORS.surface,
+    marginTop: 10,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: COLORS.border,
+  },
+  sectionTitle: {
+    fontSize: FONTS.medium,
+    fontWeight: 'bold',
+    color: COLORS.text,
+    marginBottom: 15,
+  },
+  settingItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+  },
+  settingLabel: {
+    fontSize: FONTS.medium,
+    color: COLORS.text,
+  },
+  viewTypeButtons: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  viewTypeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: SIZES.borderRadius,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    gap: 5,
+  },
+  viewTypeButtonActive: {
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+  },
+  viewTypeText: {
+    fontSize: FONTS.small,
+    color: COLORS.text,
+  },
+  viewTypeTextActive: {
+    color: COLORS.textDark,
+    fontWeight: '600',
+  },
+  themeButtons: {
+    flexDirection: 'row',
+    gap: 15,
+  },
+  themeButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 15,
+    borderRadius: SIZES.borderRadius,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    gap: 10,
+  },
+  themeButtonActive: {
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+  },
+  themeText: {
+    fontSize: FONTS.medium,
+    color: COLORS.text,
+  },
+  themeTextActive: {
+    color: COLORS.textDark,
+    fontWeight: '600',
+  },
+  colorButtons: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+  },
+  colorButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: SIZES.borderRadius,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  colorButtonActive: {
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+  },
+  colorText: {
+    fontSize: FONTS.medium,
+    color: COLORS.text,
+  },
+  colorTextActive: {
+    color: COLORS.textDark,
+    fontWeight: '600',
+  },
+  logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: SIZES.margin * 2,
+    padding: 15,
+    borderRadius: SIZES.borderRadius,
+    backgroundColor: COLORS.surface,
+    borderWidth: 2,
+    borderColor: COLORS.error,
+    gap: 10,
+  },
+  logoutText: {
+    fontSize: FONTS.medium,
+    fontWeight: 'bold',
+    color: COLORS.error,
+  },
+  footer: {
+    alignItems: 'center',
+    paddingVertical: 30,
+  },
+  footerText: {
+    fontSize: FONTS.small,
+    color: COLORS.textSecondary,
+  },
+});
