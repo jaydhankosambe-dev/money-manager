@@ -14,7 +14,7 @@ builder.Services.AddSwaggerGen();
 
 // Database configuration
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-if (connectionString?.Contains("postgres") == true)
+if (connectionString?.Contains("Host=") == true || connectionString?.Contains("postgres") == true)
 {
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(connectionString));
