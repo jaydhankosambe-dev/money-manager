@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Icon from './Icon';
 import { useAppTheme } from '../utils/useAppTheme';
 import { useSidebar } from '../contexts/SidebarContext';
 
@@ -8,9 +8,9 @@ const windowWidth = Dimensions.get('window').width;
 
 const menuItems = [
   { name: 'Dashboard', icon: 'home', route: 'Dashboard' },
-  { name: 'Assets', icon: 'wallet', route: 'Assets' },
+  { name: 'Assets', icon: 'cash', route: 'Assets' },
   { name: 'Tracker', icon: 'calendar', route: 'Tracker' },
-  { name: 'Charts', icon: 'pie-chart', route: 'Charts' },
+  { name: 'Charts', icon: 'bar-chart', route: 'Charts' },
   { name: 'Settings', icon: 'settings', route: 'Settings' },
 ];
 
@@ -34,7 +34,7 @@ export default function Sidebar({ navigation, currentRoute }) {
           style={styles.collapseButton} 
           onPress={toggleSidebar}
         >
-          <Ionicons 
+          <Icon 
             name={isCollapsed ? 'chevron-forward' : 'chevron-back'} 
             size={24} 
             color={COLORS.text} 
@@ -52,10 +52,10 @@ export default function Sidebar({ navigation, currentRoute }) {
             ]}
             onPress={() => handleNavigate(item.route)}
           >
-            <Ionicons
+            <Icon
               name={item.icon}
               size={24}
-              color={currentRoute === item.route ? COLORS.primary : COLORS.text}
+              color={currentRoute === item.route ? COLORS.textDark : COLORS.text}
             />
             {!isCollapsed && (
               <Text
@@ -125,7 +125,7 @@ const createStyles = (COLORS, SIZES, FONTS) => StyleSheet.create({
     borderRadius: SIZES.borderRadius,
   },
   menuItemActive: {
-    backgroundColor: COLORS.primaryLight,
+    backgroundColor: COLORS.primary,
   },
   menuText: {
     marginLeft: 15,
@@ -134,7 +134,7 @@ const createStyles = (COLORS, SIZES, FONTS) => StyleSheet.create({
     fontWeight: '500',
   },
   menuTextActive: {
-    color: COLORS.primary,
+    color: COLORS.textDark,
     fontWeight: '600',
   },
 });

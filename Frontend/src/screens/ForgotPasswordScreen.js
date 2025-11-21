@@ -8,10 +8,10 @@ import {
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Icon from '../components/Icon';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://money-manager-api-xr4v.onrender.com/api';
 
 export default function ForgotPasswordScreen({ onBack, onSuccess }) {
   const [step, setStep] = useState(1); // 1: Enter username/email, 2: Verify phone & reset
@@ -127,7 +127,7 @@ export default function ForgotPasswordScreen({ onBack, onSuccess }) {
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>Reset Password</Text>
             <TouchableOpacity onPress={onBack}>
-              <Ionicons name="close" size={28} color="#666" />
+              <Icon name="close" size={28} color="#666" />
             </TouchableOpacity>
           </View>
 
@@ -141,7 +141,7 @@ export default function ForgotPasswordScreen({ onBack, onSuccess }) {
           {step === 1 ? (
             <>
               <View style={[styles.inputContainer, focusedInput === 'usernameOrEmail' && styles.inputFocused]}>
-                <Ionicons name="person-outline" size={20} color="#666" style={styles.inputIcon} />
+                <Icon name="person-outline" size={20} color="#666" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Username or Email"
@@ -156,7 +156,7 @@ export default function ForgotPasswordScreen({ onBack, onSuccess }) {
 
               {error ? (
                 <View style={styles.errorContainer}>
-                  <Ionicons name="alert-circle" size={18} color="#d32f2f" />
+                  <Icon name="alert-circle" size={18} color="#d32f2f" />
                   <Text style={styles.errorText}>{error}</Text>
                 </View>
               ) : null}
@@ -176,14 +176,14 @@ export default function ForgotPasswordScreen({ onBack, onSuccess }) {
           ) : (
             <>
               <View style={styles.infoBox}>
-                <Ionicons name="information-circle" size={24} color="#2196F3" />
+                <Icon name="information-circle" size={24} color="#2196F3" />
                 <Text style={styles.infoText}>
                   Please enter your registered phone number: {phoneHint}
                 </Text>
               </View>
 
               <View style={[styles.inputContainer, focusedInput === 'phone' && styles.inputFocused]}>
-                <Ionicons name="call-outline" size={20} color="#666" style={styles.inputIcon} />
+                <Icon name="call-outline" size={20} color="#666" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Phone Number"
@@ -197,7 +197,7 @@ export default function ForgotPasswordScreen({ onBack, onSuccess }) {
               </View>
 
               <View style={[styles.inputContainer, focusedInput === 'newPassword' && styles.inputFocused]}>
-                <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
+                <Icon name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="New Password"
@@ -213,7 +213,7 @@ export default function ForgotPasswordScreen({ onBack, onSuccess }) {
                   onPress={() => setShowPassword(!showPassword)}
                   style={styles.eyeIcon}
                 >
-                  <Ionicons
+                  <Icon
                     name={showPassword ? 'eye-outline' : 'eye-off-outline'}
                     size={20}
                     color="#666"
@@ -247,7 +247,7 @@ export default function ForgotPasswordScreen({ onBack, onSuccess }) {
               )}
 
               <View style={[styles.inputContainer, focusedInput === 'confirmPassword' && styles.inputFocused]}>
-                <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
+                <Icon name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
                   placeholder="Confirm Password"
@@ -263,7 +263,7 @@ export default function ForgotPasswordScreen({ onBack, onSuccess }) {
                   onPress={() => setShowConfirmPassword(!showConfirmPassword)}
                   style={styles.eyeIcon}
                 >
-                  <Ionicons
+                  <Icon
                     name={showConfirmPassword ? 'eye-outline' : 'eye-off-outline'}
                     size={20}
                     color="#666"
@@ -273,14 +273,14 @@ export default function ForgotPasswordScreen({ onBack, onSuccess }) {
 
               {successMessage ? (
                 <View style={styles.successContainer}>
-                  <Ionicons name="checkmark-circle" size={24} color="#4CAF50" />
+                  <Icon name="checkmark-circle" size={24} color="#4CAF50" />
                   <Text style={styles.successText}>{successMessage}</Text>
                 </View>
               ) : null}
 
               {error ? (
                 <View style={styles.errorContainer}>
-                  <Ionicons name="alert-circle" size={18} color="#d32f2f" />
+                  <Icon name="alert-circle" size={18} color="#d32f2f" />
                   <Text style={styles.errorText}>{error}</Text>
                 </View>
               ) : null}
@@ -315,7 +315,7 @@ export default function ForgotPasswordScreen({ onBack, onSuccess }) {
 
 const PasswordRequirement = ({ met, text }) => (
   <View style={styles.requirementRow}>
-    <Ionicons
+    <Icon
       name={met ? 'checkmark-circle' : 'close-circle'}
       size={16}
       color={met ? '#4CAF50' : '#999'}

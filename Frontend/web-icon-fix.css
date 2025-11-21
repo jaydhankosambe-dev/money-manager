@@ -1,0 +1,10 @@
+/* Fix for Ionicons on web */
+@font-face {
+  font-family: "Ionicons";
+  src: url("./assets/node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf") format("truetype");
+}
+
+/* Ensure icon fonts are applied */
+.ionicons {
+  font-family: "Ionicons";
+}

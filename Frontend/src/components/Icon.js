@@ -1,0 +1,103 @@
+import React from 'react';
+import { Text, Platform } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+
+// Universal WebIcon component - uses emoji on web, Ionicons on native
+export default function Icon({ name, size = 24, color = '#000', style, title }) {
+  if (Platform.OS !== 'web') {
+    return <Icon name={name} size={size} color={color} style={style} title={title} />;
+  }
+  
+  // Emoji fallbacks for web
+  const iconMap = {
+    'wallet': '💰',
+    'briefcase': '💼',
+    'briefcase-outline': '💼',
+    'speedometer': '⚡',
+    'speedometer-outline': '⚡',
+    'folder': '📂',
+    'folder-outline': '📂',
+    'grid': '▦',
+    'grid-outline': '▦',
+    'apps': '▦',
+    'apps-outline': '▦',
+    'list': '☰',
+    'list-outline': '☰',
+    'albums': '▢',
+    'albums-outline': '▢',
+    'home': '🏠',
+    'home-outline': '🏠',
+    'stats-chart': '📈',
+    'stats-chart-outline': '📈',
+    'bar-chart': '📊',
+    'bar-chart-outline': '📊',
+    'pie-chart': '🥧',
+    'pie-chart-outline': '🥧',
+    'layers': '📁',
+    'layers-outline': '📁',
+    'calendar': '📅',
+    'calendar-outline': '📅',
+    'settings': '⚙️',
+    'settings-outline': '⚙️',
+    'person-outline': '👤',
+    'person': '👤',
+    'person-add': '➕👤',
+    'person-add-outline': '➕👤',
+    'lock-closed-outline': '🔒',
+    'lock-closed': '🔒',
+    'eye-outline': '👁',
+    'eye': '👁',
+    'eye-off-outline': '🙈',
+    'eye-off': '🙈',
+    'alert-circle': '⚠️',
+    'information-circle': 'ℹ️',
+    'checkmark-circle': '✅',
+    'checkmark': '✓',
+    'close': '✕',
+    'person-add': '➕',
+    'mail-outline': '📧',
+    'mail': '📧',
+    'call-outline': '📞',
+    'call': '📞',
+    'add': '➕',
+    'add-circle': '➕',
+    'pencil': '✏️',
+    'create': '✏️',
+    'trash': '🗑️',
+    'trash-outline': '🗑️',
+    'log-out': '➡️',
+    'log-out-outline': '➡️',
+    'exit': '➡️',
+    'exit-outline': '➡️',
+    'arrow-back': '←',
+    'arrow-forward': '→',
+    'chevron-back': '‹',
+    'chevron-forward': '›',
+    'search': '🔍',
+    'filter': '🔽',
+    'menu': '☰',
+    'sunny': '☀️',
+    'sunny-outline': '☀️',
+    'moon': '🌙',
+    'moon-outline': '🌙',
+    'flag': '🚩',
+    'flag-outline': '🚩',
+    'trending-up': '📈',
+    'trending-up-outline': '📈',
+    'cash': '💵',
+    'cash-outline': '💵',
+    'shield-checkmark': '🛡️',
+    'shield-checkmark-outline': '🛡️',
+    'shield': '🛡️',
+    'alert': '⚠️',
+    'alert-outline': '⚠️',
+    'warning': '⚡',
+    'warning-outline': '⚡',
+  };
+  
+  return (
+    <Text style={[{ fontSize: size * 0.8, color, lineHeight: size }, style]}>
+      {iconMap[name] || '•'}
+    </Text>
+  );
+}

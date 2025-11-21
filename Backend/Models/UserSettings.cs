@@ -30,7 +30,7 @@ public class UserSettings
     public bool ShowDashboardAssets { get; set; } = false;
 
     [MaxLength(20)]
-    public string DashboardColorScheme { get; set; } = "Default";
+    public string DashboardColorScheme { get; set; } = "Blue";
 
     [MaxLength(20)]
     public string ButtonShape { get; set; } = "Rectangle"; // Rectangle, Circle

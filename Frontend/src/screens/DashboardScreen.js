@@ -10,7 +10,7 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Icon from '../components/Icon';
 import { dashboardAPI } from '../services/api';
 import { getUser } from '../utils/storage';
 import { useAppTheme } from '../utils/useAppTheme';
@@ -90,6 +90,13 @@ export default function DashboardScreen({ navigation }) {
       .reduce((sum, e) => sum + e.amount, 0);
   }, [dashboard?.assets]);
 
+  const calculateLendAmount = useMemo(() => {
+    if (!dashboard?.assets) return 0;
+    return dashboard.assets
+      .filter(e => e.investmentType === 'Lend')
+      .reduce((sum, e) => sum + e.amount, 0);
+  }, [dashboard?.assets]);
+
   const calculatePercentage = useCallback((amount) => {
     if (!dashboard?.totalAmount || dashboard.totalAmount === 0) return 0;
     return ((amount / dashboard.totalAmount) * 100).toFixed(1);
@@ -134,6 +141,7 @@ export default function DashboardScreen({ navigation }) {
   // Calculate amounts using memoized values
   const investedAmount = calculateInvestedAmount;
   const liquidAmount = calculateLiquidAmount;
+  const lendAmount = calculateLendAmount;
   const lowRiskAmount = calculateLowRiskAmount;
   const moderateRiskAmount = calculateModerateRiskAmount;
   const highRiskAmount = calculateHighRiskAmount;
@@ -158,7 +166,7 @@ export default function DashboardScreen({ navigation }) {
             <View style={styles.statsContainer}>
               <View style={[styles.subPanel, styles.targetPanel]}>
               <View style={styles.subPanelHeader}>
-                <Ionicons name="flag" size={24} color={COLORS.target} />
+                <Icon name="flag" size={24} color={COLORS.target} />
                 <Text style={styles.subPanelLabel}>Target Amount</Text>
               </View>
               <View style={styles.panelContent}>
@@ -175,7 +183,7 @@ export default function DashboardScreen({ navigation }) {
 
             <View style={[styles.subPanel, styles.totalPanel]}>
               <View style={styles.subPanelHeader}>
-                <Ionicons name="wallet" size={24} color={COLORS.primary} />
+                <Icon name="wallet" size={24} color={COLORS.primary} />
                 <Text style={styles.subPanelLabel}>Total Amount</Text>
               </View>
               <View style={styles.panelContent}>
@@ -198,7 +206,7 @@ export default function DashboardScreen({ navigation }) {
             <View style={styles.statsContainer}>
             <View style={[styles.subPanel, styles.investedPanel]}>
               <View style={styles.subPanelHeader}>
-                <Ionicons name="trending-up" size={24} color={COLORS.invested} />
+                <Icon name="trending-up" size={24} color={COLORS.invested} />
                 <Text style={styles.subPanelLabel}>Invested</Text>
               </View>
               <View style={styles.panelContent}>
@@ -215,7 +223,7 @@ export default function DashboardScreen({ navigation }) {
 
             <View style={[styles.subPanel, styles.liquidPanel]}>
               <View style={styles.subPanelHeader}>
-                <Ionicons name="cash" size={24} color={COLORS.liquid} />
+                <Icon name="cash" size={24} color={COLORS.liquid} />
                 <Text style={styles.subPanelLabel}>Liquid</Text>
               </View>
               <View style={styles.panelContent}>
@@ -229,6 +237,23 @@ export default function DashboardScreen({ navigation }) {
                 />
               </View>
             </View>
+
+            <View style={[styles.subPanel, styles.lendPanel]}>
+              <View style={styles.subPanelHeader}>
+                <Icon name="wallet" size={24} color={COLORS.lend} />
+                <Text style={styles.subPanelLabel}>Lend</Text>
+              </View>
+              <View style={styles.panelContent}>
+                <View style={styles.panelLeft}>
+                  <Text style={[styles.subPanelAmount, styles.lendAmount]}>₹{lendAmount ? formatIndianCurrency(lendAmount) : '0'}</Text></View>
+                <RingChart 
+                  percentage={lendAmount ? parseFloat(calculatePercentage(lendAmount)) : 0}
+                  size={60}
+                  strokeWidth={8}
+                  color={COLORS.lend}
+                />
+              </View>
+            </View>
             </View>
           </View>
 
@@ -238,7 +263,7 @@ export default function DashboardScreen({ navigation }) {
             <View style={styles.statsContainer}>
             <View style={[styles.subPanel, styles.lowRiskPanel]}>
               <View style={styles.subPanelHeader}>
-                <Ionicons name="shield-checkmark" size={24} color={COLORS.lowRisk} />
+                <Icon name="shield-checkmark" size={24} color={COLORS.lowRisk} />
                 <Text style={styles.subPanelLabel}>Low Risk</Text>
               </View>
               <View style={styles.panelContent}>
@@ -255,7 +280,7 @@ export default function DashboardScreen({ navigation }) {
 
             <View style={[styles.subPanel, styles.moderateRiskPanel]}>
               <View style={styles.subPanelHeader}>
-                <Ionicons name="alert" size={24} color={COLORS.moderateRisk} />
+                <Icon name="warning" size={24} color={COLORS.moderateRisk} />
                 <Text style={styles.subPanelLabel}>Moderate Risk</Text>
               </View>
               <View style={styles.panelContent}>
@@ -272,7 +297,7 @@ export default function DashboardScreen({ navigation }) {
 
             <View style={[styles.subPanel, styles.highRiskPanel]}>
               <View style={styles.subPanelHeader}>
-                <Ionicons name="warning" size={24} color={COLORS.highRisk} />
+                <Icon name="alert" size={24} color={COLORS.highRisk} />
                 <Text style={styles.subPanelLabel}>High Risk</Text>
               </View>
               <View style={styles.panelContent}>
@@ -314,7 +339,7 @@ const createStyles = (COLORS, SIZES, FONTS) => StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: SIZES.padding,
     paddingTop: 21,
-    paddingBottom: 36,
+    paddingBottom: 33,
     backgroundColor: COLORS.primary,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
@@ -406,6 +431,10 @@ const createStyles = (COLORS, SIZES, FONTS) => StyleSheet.create({
     borderLeftWidth: 4,
     borderLeftColor: COLORS.liquid,
   },
+  lendPanel: {
+    borderLeftWidth: 4,
+    borderLeftColor: COLORS.lend,
+  },
   lowRiskPanel: {
     borderLeftWidth: 4,
     borderLeftColor: COLORS.lowRisk,
@@ -461,6 +490,9 @@ const createStyles = (COLORS, SIZES, FONTS) => StyleSheet.create({
   },
   liquidAmount: {
     color: COLORS.liquid,
+  },
+  lendAmount: {
+    color: COLORS.lend,
   },
   lowRiskAmount: {
     color: COLORS.lowRisk,

@@ -13,7 +13,7 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Icon from '../components/Icon';
 import { assetAPI, settingsAPI } from '../services/api';
 import { useAppTheme } from '../utils/useAppTheme';
 import Sidebar from '../components/Sidebar';
@@ -164,7 +164,7 @@ export default function AssetsScreen({ navigation }) {
     if (!assets || assets.length === 0) {
       return (
         <View style={styles.emptyContainer}>
-          <Ionicons name="folder-open-outline" size={80} color={COLORS.textSecondary} />
+          <Icon name="folder-open-outline" size={80} color={COLORS.textSecondary} />
           <Text style={styles.emptyText}>No assets yet</Text>
           <Text style={styles.emptySubtext}>Tap + to add your first asset</Text>
         </View>
@@ -195,7 +195,7 @@ export default function AssetsScreen({ navigation }) {
             <View style={[styles.gridCell, { flex: 1.5, alignItems: 'flex-start' }]}>
               <View style={[
                 styles.typeBadge,
-                { backgroundColor: asset.investmentType === 'Invested' ? COLORS.invested : COLORS.liquid }
+                { backgroundColor: asset.investmentType === 'Invested' ? COLORS.invested : asset.investmentType === 'Liquid' ? COLORS.liquid : COLORS.lend }
               ]}>
                 <Text style={styles.typeBadgeText}>{asset.investmentType}</Text>
               </View>
@@ -215,10 +215,10 @@ export default function AssetsScreen({ navigation }) {
             </View>
             <View style={{ flex: 1.2, flexDirection: 'row', gap: 8, justifyContent: 'flex-start', alignItems: 'center' }}>
               <TouchableOpacity onPress={() => openEditModal(asset)} style={styles.actionButtonEdit}>
-                <Ionicons name="pencil" size={18} color={COLORS.textDark} title="Edit" />
+                <Icon name="pencil" size={18} color={COLORS.textDark} title="Edit" />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => handleDelete(asset)} style={styles.actionButtonDelete}>
-                <Ionicons name="trash" size={18} color={COLORS.textDark} title="Delete" />
+                <Icon name="trash" size={18} color={COLORS.textDark} title="Delete" />
               </TouchableOpacity>
             </View>
           </View>
@@ -231,7 +231,7 @@ export default function AssetsScreen({ navigation }) {
     if (!assets || assets.length === 0) {
       return (
         <View style={styles.emptyContainer}>
-          <Ionicons name="folder-open-outline" size={80} color={COLORS.textSecondary} />
+          <Icon name="folder-open-outline" size={80} color={COLORS.textSecondary} />
           <Text style={styles.emptyText}>No assets yet</Text>
           <Text style={styles.emptySubtext}>Tap + to add your first asset</Text>
         </View>
@@ -248,10 +248,10 @@ export default function AssetsScreen({ navigation }) {
               <Text style={styles.tileName}>{asset.name}</Text>
               <View style={styles.tileActions}>
                 <TouchableOpacity onPress={() => openEditModal(asset)} style={styles.actionButtonEdit} accessibilityLabel="Edit" accessibilityHint="Edit this asset" title="Edit">
-                  <Ionicons name="pencil" size={18} color={COLORS.textDark} title="Edit" />
+                  <Icon name="pencil" size={18} color={COLORS.textDark} title="Edit" />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleDelete(asset)} style={styles.actionButtonDelete} accessibilityLabel="Delete" accessibilityHint="Delete this asset" title="Delete">
-                  <Ionicons name="trash" size={18} color={COLORS.textDark} title="Delete" />
+                  <Icon name="trash" size={18} color={COLORS.textDark} title="Delete" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -264,7 +264,7 @@ export default function AssetsScreen({ navigation }) {
             <View style={styles.tileFooter}>
               <Text style={styles.tilePercentage}>{asset.percentage}%</Text>
               <View style={styles.tileBadges}>
-                <View style={[styles.tileBadge, { backgroundColor: asset.investmentType === 'Invested' ? COLORS.invested : COLORS.liquid }]}>
+                <View style={[styles.tileBadge, { backgroundColor: asset.investmentType === 'Invested' ? COLORS.invested : asset.investmentType === 'Liquid' ? COLORS.liquid : COLORS.lend }]}>
                   <Text style={styles.tileBadgeText}>{asset.investmentType}</Text>
                 </View>
                 <View style={[
@@ -290,7 +290,7 @@ export default function AssetsScreen({ navigation }) {
     if (!assets || assets.length === 0) {
       return (
         <View style={styles.emptyContainer}>
-          <Ionicons name="folder-open-outline" size={80} color={COLORS.textSecondary} />
+          <Icon name="folder-open-outline" size={80} color={COLORS.textSecondary} />
           <Text style={styles.emptyText}>No assets yet</Text>
           <Text style={styles.emptySubtext}>Tap + to add your first asset</Text>
         </View>
@@ -304,16 +304,16 @@ export default function AssetsScreen({ navigation }) {
         {sortedAssets.map((asset) => (
           <View key={asset.id} style={[
             styles.panelCard,
-            { borderLeftColor: asset.investmentType === 'Invested' ? COLORS.invested : COLORS.liquid }
+            { borderLeftColor: asset.investmentType === 'Invested' ? COLORS.invested : asset.investmentType === 'Liquid' ? COLORS.liquid : COLORS.lend }
           ]}>
             <View style={styles.panelHeader}>
               <Text style={styles.panelName}>{asset.name}</Text>
               <View style={styles.panelActions}>
                 <TouchableOpacity onPress={() => openEditModal(asset)} style={styles.actionButtonEdit} accessibilityLabel="Edit" accessibilityHint="Edit this asset" title="Edit">
-                  <Ionicons name="pencil" size={18} color={COLORS.textDark} title="Edit" />
+                  <Icon name="pencil" size={18} color={COLORS.textDark} title="Edit" />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleDelete(asset)} style={styles.actionButtonDelete} accessibilityLabel="Delete" accessibilityHint="Delete this asset" title="Delete">
-                  <Ionicons name="trash" size={18} color={COLORS.textDark} title="Delete" />
+                  <Icon name="trash" size={18} color={COLORS.textDark} title="Delete" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -325,7 +325,7 @@ export default function AssetsScreen({ navigation }) {
             )}
             <Text style={styles.panelPercentage}>{asset.percentage}% of total</Text>
             <View style={styles.panelBadges}>
-              <View style={[styles.panelBadge, { backgroundColor: asset.investmentType === 'Invested' ? COLORS.invested : COLORS.liquid }]}>
+              <View style={[styles.panelBadge, { backgroundColor: asset.investmentType === 'Invested' ? COLORS.invested : asset.investmentType === 'Liquid' ? COLORS.liquid : COLORS.lend }]}>
                 <Text style={styles.panelBadgeText}>{asset.investmentType}</Text>
               </View>
               <View style={[
@@ -353,7 +353,7 @@ export default function AssetsScreen({ navigation }) {
           <Text style={styles.assetName}>{item.name}</Text>
           <Text style={styles.assetAmount}>₹{formatIndianCurrency(item.amount)}</Text>
           <View style={styles.assetTags}>
-            <View style={[styles.tag, { backgroundColor: item.investmentType === 'Invested' ? COLORS.invested : COLORS.liquid }]}>
+            <View style={[styles.tag, { backgroundColor: item.investmentType === 'Invested' ? COLORS.invested : item.investmentType === 'Liquid' ? COLORS.liquid : COLORS.lend }]}>
               <Text style={styles.tagText}>{item.investmentType}</Text>
             </View>
             <View style={[
@@ -373,11 +373,11 @@ export default function AssetsScreen({ navigation }) {
         <View style={styles.assetActions}>
           <TouchableOpacity style={[styles.actionButton, { backgroundColor: COLORS.info + '20' }]}
             onPress={() => openEditModal(item)}>
-            <Ionicons name="pencil" size={20} color={COLORS.info} />
+            <Icon name="pencil" size={20} color={COLORS.info} />
           </TouchableOpacity>
           <TouchableOpacity style={[styles.actionButton, { backgroundColor: COLORS.error + '20' }]}
             onPress={() => handleDelete(item)}>
-            <Ionicons name="trash" size={20} color={COLORS.error} />
+            <Icon name="trash" size={20} color={COLORS.error} />
           </TouchableOpacity>
         </View>
       </View>
@@ -402,16 +402,16 @@ export default function AssetsScreen({ navigation }) {
           <TouchableOpacity style={styles.addButton} 
             onPress={openAddModal}
               accessibilityLabel="Add" accessibilityHint="Add new asset" title="Add">
-            <Ionicons name="add" size={18} color="#FFFFFF" title="Add" />
+            <Icon name="add" size={18} color="#FFFFFF" title="Add" />
           </TouchableOpacity>
         </View>
 
         <ScrollView style={styles.content}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
           <View style={styles.section}>
-            {(!settings?.dashboardViewType || settings?.dashboardViewType === 'Grid' || settings?.dashboardViewType === 'Table') && renderAssetGrid()}
-            {settings?.dashboardViewType === 'Tiles' && renderAssetTiles()}
-            {settings?.dashboardViewType === 'Panel' && renderAssetPanel()}
+            {(!settings?.dashboardViewType || settings?.dashboardViewType.toLowerCase() === 'grid' || settings?.dashboardViewType.toLowerCase() === 'table') && renderAssetGrid()}
+            {settings?.dashboardViewType?.toLowerCase() === 'tiles' && renderAssetTiles()}
+            {settings?.dashboardViewType?.toLowerCase() === 'panel' && renderAssetPanel()}
           </View>
         </ScrollView>
 
@@ -425,7 +425,7 @@ export default function AssetsScreen({ navigation }) {
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>{editMode ? 'Edit' : 'Add'} Asset</Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <Ionicons name="close" size={28} color={COLORS.textSecondary} />
+                <Icon name="close" size={28} color={COLORS.textSecondary} />
               </TouchableOpacity>
             </View>
 
@@ -455,7 +455,7 @@ export default function AssetsScreen({ navigation }) {
 
               <Text style={styles.label}>Asset Type</Text>
               <View style={styles.optionsContainer}>
-                {['Invested', 'Liquid'].map((type) => (
+                {['Invested', 'Liquid', 'Lend'].map((type) => (
                   <TouchableOpacity
                     key={type} style={[
                       styles.optionButton,
@@ -512,7 +512,7 @@ export default function AssetsScreen({ navigation }) {
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Delete Asset</Text>
               <TouchableOpacity onPress={() => setDeleteModalVisible(false)}>
-                <Ionicons name="close" size={28} color={COLORS.textSecondary} />
+                <Icon name="close" size={28} color={COLORS.textSecondary} />
               </TouchableOpacity>
             </View>
 
@@ -560,7 +560,7 @@ const createStyles = (COLORS, SIZES, FONTS) => StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: SIZES.padding,
     paddingTop: 17,
-    paddingBottom: 34,
+    paddingBottom: 32,
     backgroundColor: COLORS.primary,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
@@ -923,7 +923,8 @@ const createStyles = (COLORS, SIZES, FONTS) => StyleSheet.create({
     padding: SIZES.padding * 2,
     width: isDesktop ? 500 : '100%',
     maxWidth: 500,
-    maxHeight: '90%',
+    maxHeight: 'calc(90% + 40px)',
+    height: isDesktop ? 'auto' : 'calc(90% + 40px)',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,

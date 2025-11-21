@@ -13,7 +13,7 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Icon from '../components/Icon';
 import { BarChart } from 'react-native-chart-kit';
 import { chartAPI, settingsAPI } from '../services/api';
 import { useAppTheme } from '../utils/useAppTheme';
@@ -270,7 +270,7 @@ export default function TrackerScreen({ navigation }) {
             accessibilityLabel="Add"
             accessibilityHint="Add new monthly entry" title="Add"
           >
-            <Ionicons name="add" size={18} color="#FFFFFF" title="Add" />
+            <Icon name="add" size={18} color="#FFFFFF" title="Add" />
           </TouchableOpacity>
         </View>
 
@@ -300,6 +300,9 @@ export default function TrackerScreen({ navigation }) {
                   fillShadowGradient: getSchemeColor(settings?.dashboardColorScheme || 'Blue'),
                   fillShadowGradientOpacity: 1,
                   labelColor: (opacity = 1) => COLORS.text,
+                  propsForLabels: {
+                    fontSize: 13,
+                  },
                   style: {
                     borderRadius: SIZES.borderRadius,
                   },
@@ -344,7 +347,7 @@ export default function TrackerScreen({ navigation }) {
                       accessibilityLabel="Edit"
                       accessibilityHint="Edit this entry" title="Edit"
 >
-                      <Ionicons name="pencil" size={18} color={COLORS.textDark} title="Edit" />
+                      <Icon name="pencil" size={18} color={COLORS.textDark} title="Edit" />
                     </TouchableOpacity>
                     <TouchableOpacity 
                       onPress={() => handleDeleteEntry(entry)}
@@ -352,7 +355,7 @@ export default function TrackerScreen({ navigation }) {
                       accessibilityLabel="Delete"
                       accessibilityHint="Delete this entry" title="Delete"
 >
-                      <Ionicons name="trash" size={18} color={COLORS.textDark} title="Delete" />
+                      <Icon name="trash" size={18} color={COLORS.textDark} title="Delete" />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -374,7 +377,7 @@ export default function TrackerScreen({ navigation }) {
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Add Monthly Entry</Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <Ionicons name="close" size={28} color={COLORS.textSecondary} />
+                <Icon name="close" size={28} color={COLORS.textSecondary} />
               </TouchableOpacity>
             </View>
 
@@ -387,7 +390,7 @@ export default function TrackerScreen({ navigation }) {
                 <Text style={styles.dropdownButtonText}>
                   {MONTHS.find(m => m.value === formData.month)?.label || 'Select Month'}
                 </Text>
-                <Ionicons 
+                <Icon 
                   name={monthDropdownOpen ? "chevron-up" : "chevron-down"} 
                   size={20} 
                   color={COLORS.textSecondary} 
@@ -415,7 +418,7 @@ export default function TrackerScreen({ navigation }) {
                           {month.label}
                         </Text>
                         {formData.month === month.value && (
-                          <Ionicons name="checkmark" size={20} color={COLORS.primary} />
+                          <Icon name="checkmark" size={20} color={COLORS.primary} />
                         )}
                       </TouchableOpacity>
                     ))}
@@ -431,7 +434,7 @@ export default function TrackerScreen({ navigation }) {
                 <Text style={styles.dropdownButtonText}>
                   {formData.year}
                 </Text>
-                <Ionicons 
+                <Icon 
                   name={yearDropdownOpen ? "chevron-up" : "chevron-down"} 
                   size={20} 
                   color={COLORS.textSecondary} 
@@ -459,7 +462,7 @@ export default function TrackerScreen({ navigation }) {
                           {year.label}
                         </Text>
                         {formData.year === year.value && (
-                          <Ionicons name="checkmark" size={20} color={COLORS.primary} />
+                          <Icon name="checkmark" size={20} color={COLORS.primary} />
                         )}
                       </TouchableOpacity>
                     ))}
@@ -496,7 +499,7 @@ export default function TrackerScreen({ navigation }) {
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Edit Monthly Entry</Text>
               <TouchableOpacity onPress={() => setEditModalVisible(false)}>
-                <Ionicons name="close" size={28} color={COLORS.textSecondary} />
+                <Icon name="close" size={28} color={COLORS.textSecondary} />
               </TouchableOpacity>
             </View>
 
@@ -512,7 +515,7 @@ export default function TrackerScreen({ navigation }) {
                 <Text style={styles.dropdownButtonText}>
                   {MONTHS.find(m => m.value === formData.month)?.label || 'Select Month'}
                 </Text>
-                <Ionicons 
+                <Icon 
                   name={editMonthDropdownOpen ? "chevron-up" : "chevron-down"} 
                   size={20} 
                   color={COLORS.textSecondary} 
@@ -540,7 +543,7 @@ export default function TrackerScreen({ navigation }) {
                           {month.label}
                         </Text>
                         {formData.month === month.value && (
-                          <Ionicons name="checkmark" size={20} color={COLORS.primary} />
+                          <Icon name="checkmark" size={20} color={COLORS.primary} />
                         )}
                       </TouchableOpacity>
                     ))}
@@ -559,7 +562,7 @@ export default function TrackerScreen({ navigation }) {
                 <Text style={styles.dropdownButtonText}>
                   {formData.year}
                 </Text>
-                <Ionicons 
+                <Icon 
                   name={editYearDropdownOpen ? "chevron-up" : "chevron-down"} 
                   size={20} 
                   color={COLORS.textSecondary} 
@@ -587,7 +590,7 @@ export default function TrackerScreen({ navigation }) {
                           {year.label}
                         </Text>
                         {formData.year === year.value && (
-                          <Ionicons name="checkmark" size={20} color={COLORS.primary} />
+                          <Icon name="checkmark" size={20} color={COLORS.primary} />
                         )}
                       </TouchableOpacity>
                     ))}
@@ -624,7 +627,7 @@ export default function TrackerScreen({ navigation }) {
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Delete Entry</Text>
               <TouchableOpacity onPress={() => setDeleteModalVisible(false)}>
-                <Ionicons name="close" size={28} color={COLORS.textSecondary} />
+                <Icon name="close" size={28} color={COLORS.textSecondary} />
               </TouchableOpacity>
             </View>
 
@@ -675,8 +678,8 @@ const createStyles = (COLORS, SIZES, FONTS) => StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: SIZES.padding,
-    paddingTop: 17,
-    paddingBottom: 34,
+    paddingTop: 21,
+    paddingBottom: 28,
     backgroundColor: COLORS.primary,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,

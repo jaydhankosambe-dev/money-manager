@@ -31,7 +31,7 @@ public class SettingsService : ISettingsService
                 ShowAssetName = true,
                 ShowInvestmentType = true,
                 ShowDashboardAssets = false,
-                DashboardColorScheme = "Default",
+                DashboardColorScheme = "Blue",
                 CreatedAt = DateTime.UtcNow
             };
 

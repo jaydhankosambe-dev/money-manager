@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Icon from '../components/Icon';
 import { settingsAPI } from '../services/api';
 import { getUser } from '../utils/storage';
 import { useTheme } from '../context/ThemeContext';
@@ -167,7 +167,7 @@ export default function SettingsScreen({ navigation }) {
                   onPress={() => updateSetting('dashboardViewType', type)}
                   disabled={updating}
                 >
-                  <Ionicons
+                  <Icon
                     name={
                       type === 'Grid' ? 'grid' :
                       type === 'Tiles' ? 'list' : 'albums'
@@ -204,7 +204,7 @@ export default function SettingsScreen({ navigation }) {
                 onPress={() => updateSetting('theme', themeOption)}
                 disabled={updating}
               >
-                <Ionicons
+                <Icon
                   name={themeOption === 'Light' ? 'sunny' : 'moon'}
                   size={24}
                   color={(settings?.theme || 'Light') === themeOption ? COLORS.textDark : COLORS.text}
@@ -224,7 +224,7 @@ export default function SettingsScreen({ navigation }) {
 
           {/* Color Scheme */}
           <View style={styles.panel}>
-          <Text style={styles.sectionTitle}>Dashboard Color Scheme</Text>
+          <Text style={styles.sectionTitle}>Color Scheme</Text>
           
           <View style={styles.colorButtons}>
             {['Blue', 'Green', 'Purple', 'Orange', 'Teal', 'Red', 'Indigo', 'Pink', 'Cyan', 'Emerald', 'Lime'].map((scheme) => (
@@ -257,7 +257,7 @@ export default function SettingsScreen({ navigation }) {
             onPress={handleLogout}
             activeOpacity={0.7}
           >
-            <Ionicons name="log-out" size={24} color={COLORS.error} />
+            <Icon name="log-out" size={24} color={COLORS.error} />
             <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>
 
@@ -291,7 +291,7 @@ const createStyles = (COLORS, SIZES, FONTS) => StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: SIZES.padding,
     paddingTop: 21,
-    paddingBottom: 36,
+    paddingBottom: 33,
     backgroundColor: COLORS.primary,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,

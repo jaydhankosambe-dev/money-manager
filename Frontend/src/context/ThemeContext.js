@@ -134,6 +134,7 @@ const COMMON_COLORS = {
   // Investment type colors
   invested: '#2196F3',
   liquid: '#00BCD4',
+  lend: '#FF9800',
   
   // Target color
   target: '#9C27B0',
@@ -159,7 +160,46 @@ export const FONTS = {
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState('Light');
   const [colorScheme, setColorScheme] = useState('Blue');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [initialized, setInitialized] = useState(false);
+
+  // Load theme settings from API on mount
+  React.useEffect(() => {
+    const loadThemeSettings = async () => {
+      try {
+        const AsyncStorage = require('@react-native-async-storage/async-storage').default;
+        const token = await AsyncStorage.getItem('token');
+        
+        if (token) {
+          const axios = require('axios').default;
+          const API_URL = 'https://money-manager-api-xr4v.onrender.com/api';
+          
+          const response = await axios.get(`${API_URL}/settings`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+          
+          if (response.data) {
+            if (response.data.theme) {
+              setTheme(response.data.theme);
+            }
+            if (response.data.dashboardColorScheme) {
+              setColorScheme(response.data.dashboardColorScheme);
+            }
+          }
+        }
+      } catch (error) {
+        console.log('Could not load theme settings:', error);
+      } finally {
+        setLoading(false);
+        setInitialized(true);
+      }
+    };
+
+    loadThemeSettings();
+  }, []);
 
   const colors = React.useMemo(() => {
     const baseColors = theme === 'Dark' ? DARK_COLORS : LIGHT_COLORS;
@@ -179,7 +219,8 @@ export const ThemeProvider = ({ children }) => {
     updateTheme: setTheme,
     updateColorScheme: setColorScheme,
     loading,
-  }), [theme, colorScheme, colors, loading]);
+    initialized,
+  }), [theme, colorScheme, colors, loading, initialized]);
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 };

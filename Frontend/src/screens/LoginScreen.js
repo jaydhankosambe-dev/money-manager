@@ -9,12 +9,42 @@ import {
   Modal,
   ScrollView,
   Alert,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import ForgotPasswordScreen from './ForgotPasswordScreen';
 
-const API_URL = 'http://localhost:5000/api';
+// Web fallback icons using Unicode/Emoji
+const WebIcon = ({ name, size, color, style }) => {
+  if (Platform.OS !== 'web') {
+    return <WebIcon name={name} size={size} color={color} style={style} />;
+  }
+  
+  const iconMap = {
+    'wallet': '💰',
+    'person-outline': '👤',
+    'lock-closed-outline': '🔒',
+    'eye-outline': '👁',
+    'eye-off-outline': '👁‍🗨',
+    'alert-circle': '⚠️',
+    'person-add': '➕',
+    'close': '✕',
+    'checkmark-circle': '✓',
+    'person': '👤',
+    'mail-outline': '📧',
+    'call-outline': '📞',
+    'checkmark': '✓',
+  };
+  
+  return (
+    <Text style={[{ fontSize: size * 0.8, color, lineHeight: size }, style]}>
+      {iconMap[name] || '•'}
+    </Text>
+  );
+};
+
+const API_URL = 'https://money-manager-api-xr4v.onrender.com/api';
 
 export default function LoginScreen({ onLogin }) {
   const [username, setUsername] = useState('');
@@ -181,14 +211,14 @@ export default function LoginScreen({ onLogin }) {
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.header}>
-          <Ionicons name="wallet" size={60} color="#2196F3" />
+          <WebIcon name="wallet" size={60} color="#2196F3" />
           <Text style={styles.appName}>Money Manager</Text>
         </View>
         <Text style={styles.tagline}>Manage Your Finances Wisely</Text>
 
         <View style={styles.form}>
           <View style={[styles.inputContainer, focusedInput === 'username' && styles.inputFocused]}>
-            <Ionicons name="person-outline" size={20} color="#666" style={styles.inputIcon} />
+            <WebIcon name="person-outline" size={20} color="#666" style={styles.inputIcon} />
             <TextInput
               style={styles.input}
               placeholder="Username"
@@ -202,7 +232,7 @@ export default function LoginScreen({ onLogin }) {
           </View>
 
           <View style={[styles.inputContainer, focusedInput === 'password' && styles.inputFocused]}>
-            <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
+            <WebIcon name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
             <TextInput
               style={styles.input}
               placeholder="Password"
@@ -218,7 +248,7 @@ export default function LoginScreen({ onLogin }) {
               onPress={() => setShowPassword(!showPassword)}
               style={styles.eyeIcon}
             >
-              <Ionicons
+              <WebIcon
                 name={showPassword ? 'eye-outline' : 'eye-off-outline'}
                 size={20}
                 color="#666"
@@ -228,7 +258,7 @@ export default function LoginScreen({ onLogin }) {
 
           {loginError ? (
             <View style={styles.errorContainer}>
-              <Ionicons name="alert-circle" size={18} color="#d32f2f" />
+              <WebIcon name="alert-circle" size={18} color="#d32f2f" />
               <Text style={styles.errorText}>{loginError}</Text>
             </View>
           ) : null}
@@ -269,10 +299,7 @@ export default function LoginScreen({ onLogin }) {
             disabled={loading}
           >
             <Text style={styles.signupText}>Don't have an account? </Text>
-            <View style={styles.signupIconContainer}>
-              <Text style={styles.signupTextBold}>Sign Up</Text>
-              <Ionicons name="person-add" size={20} color="#2196F3" style={styles.signupIcon} />
-            </View>
+            <Text style={styles.signupTextBold}>Sign Up</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -304,13 +331,13 @@ export default function LoginScreen({ onLogin }) {
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>Create Account</Text>
                 <TouchableOpacity onPress={handleCancelRegister}>
-                  <Ionicons name="close" size={28} color="#333" />
+                  <WebIcon name="close" size={28} color="#333" />
                 </TouchableOpacity>
               </View>
 
               {successMessage && (
                 <View style={styles.successMessageContainer}>
-                  <Ionicons name="checkmark-circle" size={24} color="#4CAF50" />
+                  <WebIcon name="checkmark-circle" size={24} color="#4CAF50" />
                   <Text style={styles.successMessageText}>{successMessage}</Text>
                 </View>
               )}
@@ -318,7 +345,7 @@ export default function LoginScreen({ onLogin }) {
               <ScrollView style={styles.modalForm} showsVerticalScrollIndicator={false}>
                 {errors.name && <Text style={styles.fieldErrorText}>{errors.name}</Text>}
                 <View style={[styles.inputContainer, focusedInput === 'regName' && styles.inputFocused, errors.name && styles.inputError]}>
-                  <Ionicons name="person" size={20} color="#666" style={styles.inputIcon} />
+                  <WebIcon name="person" size={20} color="#666" style={styles.inputIcon} />
                   <TextInput
                     style={styles.input}
                     placeholder="Full Name"
@@ -332,7 +359,7 @@ export default function LoginScreen({ onLogin }) {
 
                 {errors.username && <Text style={styles.fieldErrorText}>{errors.username}</Text>}
                 <View style={[styles.inputContainer, focusedInput === 'regUsername' && styles.inputFocused, errors.username && styles.inputError]}>
-                  <Ionicons name="person-outline" size={20} color="#666" style={styles.inputIcon} />
+                  <WebIcon name="person-outline" size={20} color="#666" style={styles.inputIcon} />
                   <TextInput
                     style={styles.input}
                     placeholder="Username (min 4 characters)"
@@ -348,7 +375,7 @@ export default function LoginScreen({ onLogin }) {
                 <View>
                   {errors.password && <Text style={styles.fieldErrorText}>{errors.password}</Text>}
                   <View style={[styles.inputContainer, focusedInput === 'regPassword' && styles.inputFocused, errors.password && styles.inputError]}>
-                    <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
+                    <WebIcon name="lock-closed-outline" size={20} color="#666" style={styles.inputIcon} />
                     <TextInput
                       style={styles.input}
                       placeholder="Password"
@@ -364,7 +391,7 @@ export default function LoginScreen({ onLogin }) {
                       onPress={() => setShowPasswordInfo(!showPasswordInfo)}
                       style={styles.infoIcon}
                     >
-                      <Ionicons
+                      <WebIcon
                         name="information-circle-outline"
                         size={22}
                         color="#2196F3"
@@ -374,7 +401,7 @@ export default function LoginScreen({ onLogin }) {
                       onPress={() => setShowRegPassword(!showRegPassword)}
                       style={styles.eyeIcon}
                     >
-                      <Ionicons
+                      <WebIcon
                         name={showRegPassword ? 'eye-outline' : 'eye-off-outline'}
                         size={20}
                         color="#666"
@@ -411,7 +438,7 @@ export default function LoginScreen({ onLogin }) {
 
                 {errors.email && <Text style={styles.fieldErrorText}>{errors.email}</Text>}
                 <View style={[styles.inputContainer, focusedInput === 'regEmail' && styles.inputFocused, errors.email && styles.inputError]}>
-                  <Ionicons name="mail-outline" size={20} color="#666" style={styles.inputIcon} />
+                  <WebIcon name="mail-outline" size={20} color="#666" style={styles.inputIcon} />
                   <TextInput
                     style={styles.input}
                     placeholder="Email"
@@ -427,7 +454,7 @@ export default function LoginScreen({ onLogin }) {
 
                 {errors.phone && <Text style={styles.fieldErrorText}>{errors.phone}</Text>}
                 <View style={[styles.inputContainer, focusedInput === 'regPhone' && styles.inputFocused, errors.phone && styles.inputError]}>
-                  <Ionicons name="call-outline" size={20} color="#666" style={styles.inputIcon} />
+                  <WebIcon name="call-outline" size={20} color="#666" style={styles.inputIcon} />
                   <TextInput
                     style={styles.input}
                     placeholder="Phone Number"
@@ -442,7 +469,7 @@ export default function LoginScreen({ onLogin }) {
 
                 {registerError ? (
                   <View style={styles.errorContainer}>
-                    <Ionicons name="alert-circle" size={18} color="#d32f2f" />
+                    <WebIcon name="alert-circle" size={18} color="#d32f2f" />
                     <Text style={styles.errorText}>{registerError}</Text>
                   </View>
                 ) : null}
@@ -479,7 +506,7 @@ export default function LoginScreen({ onLogin }) {
 
 const PasswordRequirement = ({ met, text }) => (
   <View style={styles.requirementRow}>
-    <Ionicons
+    <WebIcon
       name={met ? 'checkmark-circle' : 'close-circle'}
       size={16}
       color={met ? '#4CAF50' : '#F44336'}
