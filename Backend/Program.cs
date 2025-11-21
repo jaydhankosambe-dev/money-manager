@@ -13,8 +13,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Database configuration
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (connectionString?.Contains("postgres") == true)
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseNpgsql(connectionString));
+}
+else
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlServer(connectionString));
+}
 
 // JWT Authentication
 var jwtKey = builder.Configuration["JwtSettings:SecretKey"] ?? "YourSuperSecretKeyForJWTTokenGeneration12345!";
