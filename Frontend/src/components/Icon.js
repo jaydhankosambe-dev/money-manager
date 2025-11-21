@@ -93,6 +93,8 @@ export default function Icon({ name, size = 24, color = '#000', style, title }) 
     'alert-outline': '⚠️',
     'warning': '⚡',
     'warning-outline': '⚡',
+    'handshake': '🤝',
+    'handshake-outline': '🤝',
   };
   
   return (
