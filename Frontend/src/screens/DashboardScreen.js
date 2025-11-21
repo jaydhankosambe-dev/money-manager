@@ -240,7 +240,7 @@ export default function DashboardScreen({ navigation }) {
 
             <View style={[styles.subPanel, styles.lendPanel]}>
               <View style={styles.subPanelHeader}>
-                <Icon name="wallet" size={24} color={COLORS.lend} />
+                <Icon name="handshake" size={24} color={COLORS.lend} />
                 <Text style={styles.subPanelLabel}>Lend</Text>
               </View>
               <View style={styles.panelContent}>
